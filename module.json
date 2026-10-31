@@ -1,0 +1,63 @@
+{
+  "id": "stef-ds-charsheet",
+  "title": "Stef's Character Sheets Evolved for Draw Steel",
+  "description": "A compact hero and monster sheet for the Draw Steel system: name, origins, level and characteristic badges in the header over optional class art, the portrait with a dark vitals strip (Stamina, Recoveries, heroic resource, Surges), a combat strip, a collapsible sidebar with combat stats, potency, immunities, skills and languages, and collapsible, searchable item tables. Built on the system's own sheets, so every roll, action and drop behaves as in the system sheet. Stef's Character Sheets Evolved for Draw Steel is not affiliated with MCDM Productions, LLC. Draw Steel is a trademark of MCDM Productions, LLC.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Stefan",
+      "url": "https://github.com/stefozr"
+    }
+  ],
+  "url": "https://github.com/stefozr/stef-ds-charsheet",
+  "manifest": "https://github.com/stefozr/stef-ds-charsheet/releases/latest/download/module.json",
+  "download": "https://github.com/stefozr/stef-ds-charsheet/releases/download/v1.0.0/module.zip",
+  "bugs": "https://github.com/stefozr/stef-ds-charsheet/issues",
+  "license": "LICENSE",
+  "readme": "README.md",
+  "changelog": "CHANGELOG.md",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14.369"
+  },
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/stef-ds-charsheet.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "flags": {
+    "hotReload": {
+      "extensions": [
+        "css",
+        "hbs",
+        "json"
+      ],
+      "paths": [
+        "styles",
+        "templates",
+        "lang"
+      ]
+    }
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "draw-steel",
+        "type": "system",
+        "compatibility": {
+          "minimum": "1.1.2",
+          "verified": "1.1.2"
+        },
+        "reason": "The sheets extend the Draw Steel system's own hero and NPC sheets."
+      }
+    ]
+  }
+}

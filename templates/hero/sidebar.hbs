@@ -1,0 +1,39 @@
+{{!-- Sidebar. Play: traits as chips (combat, movement and potency are in the header strip). Edit: immunity /
+     weakness editors, skills and languages (combat and movement are edited in the header strip). --}}
+<aside class="cse-sidebar {{#if isPlay}}play{{else}}edit standard-form{{/if}}">
+  {{#if isPlay}}
+  <fieldset class="cse-chip-card">
+    <legend>{{systemFields.damage.fields.immunities.label}}</legend>
+    {{> cseChipList items=cseChips.immunities kind="immunity"}}
+  </fieldset>
+  <fieldset class="cse-chip-card">
+    <legend>{{systemFields.damage.fields.weaknesses.label}}</legend>
+    {{> cseChipList items=cseChips.weaknesses kind="weakness"}}
+  </fieldset>
+  {{else}}
+  {{#each cseDamageEdit as |card|}}{{> cseDamageTraitsEdit card}}{{/each}}
+  {{/if}}
+  <fieldset class="skills cse-chip-card">
+    <legend>
+      {{systemFields.skills.fields.value.label}}
+      {{#if unfilledSkill}}
+      <button type="button" class="icon fa-solid fa-clipboard-question"
+        data-tooltip-text="{{localize "DRAW_STEEL.ADVANCEMENT.FillTrait.button" type=(localize "TYPES.Advancement.skill")}}"
+        data-action="fillTrait" data-type="skill"></button>
+      {{/if}}
+    </legend>
+    {{#if isPlay}}
+    {{#each cseChips.skills as |group|}}
+    <div class="cse-chip-group">
+      <span class="cse-chip-group-label">{{group.label}}</span>
+      {{> cseChipList items=group.skills kind="skill"}}
+    </div>
+    {{else}}
+    <span class="cse-chips-none">{{localize "COMMON.None"}}</span>
+    {{/each}}
+    {{else}}
+    {{formInput systemFields.skills.fields.value value=systemSource.skills.value options=skills.options dataset=datasets.isSource}}
+    {{/if}}
+  </fieldset>
+  {{> cseLanguages}}
+</aside>

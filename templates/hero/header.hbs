@@ -1,0 +1,163 @@
+{{!-- Origin tag: same behaviour as the system header (viewDoc / deleteDoc / addOrigin). --}}
+{{#*inline "originTag"}}
+{{#if originDoc}}
+<span class="cse-origin" data-document-uuid="{{lookup originDoc "uuid"}}">
+  <a class="cse-origin-name" data-action="viewDoc">{{lookup originDoc "name"}}</a>
+  {{#unless (or @root.isPlay noEdit)}}
+  <a class="cse-origin-delete" data-action="deleteDoc" data-tooltip="DSCSE.RemoveOrigin"><i class="fa-solid fa-xmark" inert></i></a>
+  {{/unless}}
+</span>
+{{else}}
+{{#unless @root.isPlay}}
+{{#unless noEdit}}
+<a class="cse-origin cse-origin-empty" data-action="addOrigin" data-type="{{originType}}">
+  <i class="fa-solid fa-plus" inert></i> {{localize (concat "TYPES.Item." originType)}}
+</a>
+{{/unless}}
+{{/unless}}
+{{/if}}
+{{/inline}}
+
+<header class="cse-header {{#if classArt}}cse-has-art{{/if}}" style="
+  {{#if classArt}} --cse-class-art: url('{{classArt}}'); {{/if}}
+  {{#if avatarProperties.objectFit}} --avatar-object-fit: {{avatarProperties.objectFit}}; {{/if}}
+  {{#if avatarProperties.objectPosition}} --avatar-object-position: {{avatarProperties.objectPosition}}; {{/if}}
+  ">
+  <div class="cse-vitals-container">
+    <div class="cse-portrait">
+      <img src="{{document.img}}" alt="{{document.name}}" data-action="{{ifThen isPlay "showPortraitArtwork" "editImage"}}" {{#unless isPlay}}data-edit="img"{{/unless}} title="{{document.name}}">
+    </div>
+    <div class="cse-vitals">
+      {{> cseStaminaMeter}}
+      <div class="cse-vitals-row">
+        {{!-- Each card: icon, value, label (clickable on Recoveries / Surges). --}}
+        <div class="cse-vital cse-recoveries">
+          <i class="cse-vital-icon fa-solid fa-heart-pulse" inert></i>
+          <span class="cse-vital-values">
+            {{#if isPlay}}{{formInput systemFields.recoveries.fields.value value=system.recoveries.value dataset=datasets.notSource}}{{else}}<span>{{system.recoveries.value}}</span>{{/if}}
+            <span class="cse-max">/ {{system.recoveries.max}}</span>
+          </span>
+          {{#if editable}}
+          <button type="button" class="cse-vital-label" data-action="spendRecovery" data-tooltip="DRAW_STEEL.Actor.base.SpendRecovery.tooltip">
+            {{systemFields.recoveries.label}}
+          </button>
+          {{else}}
+          <span class="cse-vital-label">{{systemFields.recoveries.label}}</span>
+          {{/if}}
+        </div>
+        <div class="cse-vital cse-heroic">
+          <i class="cse-vital-icon fa-solid {{heroicIcon}}" inert></i>
+          <span class="cse-vital-values">
+            {{#if isPlay}}{{formInput systemFields.hero.fields.primary.fields.value value=system.hero.primary.value dataset=datasets.notSource}}{{else}}<span>{{system.hero.primary.value}}</span>{{/if}}
+          </span>
+          <span class="cse-vital-label">{{system.hero.primary.label}}</span>
+        </div>
+        <div class="cse-vital cse-surges">
+          <i class="cse-vital-icon fa-solid fa-bolt-lightning" inert></i>
+          <span class="cse-vital-values">
+            {{#if isPlay}}{{formInput systemFields.hero.fields.surges value=system.hero.surges dataset=datasets.notSource}}{{else}}<span>{{system.hero.surges}}</span>{{/if}}
+          </span>
+          {{#if editable}}
+          <button type="button" class="cse-vital-label" data-action="gainSurges" data-tooltip="DRAW_STEEL.Setting.HeroTokens.GainSurges.tooltip">
+            {{systemFields.hero.fields.surges.label}}
+          </button>
+          {{else}}
+          <span class="cse-vital-label">{{systemFields.hero.fields.surges.label}}</span>
+          {{/if}}
+        </div>
+        {{#if (gte system.level 10)}}
+        <div class="cse-vital cse-epic">
+          <i class="cse-vital-icon fa-solid fa-crown" inert></i>
+          <span class="cse-vital-values">
+            {{#if isPlay}}{{formInput systemFields.hero.fields.epic.fields.value value=system.hero.epic.value dataset=datasets.notSource}}{{else}}<span>{{system.hero.epic.value}}</span>{{/if}}
+          </span>
+          <span class="cse-vital-label">{{system.hero.epic.label}}</span>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+
+  <div class="cse-header-main">
+    <div class="cse-name-row">
+      {{#if isPlay}}
+      <h1 class="cse-name">{{document.name}}</h1>
+      {{else}}
+      {{formInput fields.name value=source.name placeholder=(localize "DOCUMENT.FIELDS.name.label") classes="cse-name-input"}}
+      {{/if}}
+      {{#if (and isPlay editable)}}
+      <button type="button" class="cse-header-button" data-action="takeRespite" data-tooltip="DRAW_STEEL.Actor.hero.TakeRespite">
+        <i class="fa-solid fa-bed" inert></i>
+      </button>
+      {{/if}}
+    </div>
+
+    <div class="cse-origins">
+      {{> originTag originDoc=document.system.ancestry originType="ancestry"}}
+      {{> originTag originDoc=document.system.culture originType="culture"}}
+      {{> originTag originDoc=document.system.career originType="career"}}
+      {{> originTag originDoc=document.system.class originType="class"}}
+      {{#each document.system.subclasses as |subclass|}}
+      {{> originTag originDoc=subclass originType="subclass" noEdit=true}}
+      {{/each}}
+    </div>
+
+    <div class="cse-level-row">
+      <div class="cse-level-block">
+        <span class="cse-level-label">{{localize "DRAW_STEEL.Item.class.FIELDS.level.label"}}</span>
+        {{#if system.advancementReady}}
+        <button type="button" class="cse-level-value cse-level-up" {{disabled (not editable)}} data-action="levelUp" data-tooltip="DRAW_STEEL.SHEET.LevelUp">
+          {{system.level}} <i class="fa-solid fa-up-long" inert></i>
+        </button>
+        {{else}}
+        <span class="cse-level-value">{{system.level}}</span>
+        {{/if}}
+      </div>
+      {{#if isPlay}}
+      <div class="cse-stat-pair cse-stat-even">
+        <span class="cse-stat-label">{{systemFields.hero.fields.xp.label}}</span>
+        <span class="cse-stat-value">{{system.hero.xp}}{{#if system.nextLevelXP}}<span class="cse-max"> / {{system.nextLevelXP}}</span>{{/if}}</span>
+        {{#if system.nextLevelXP}}
+        <span class="cse-xp-bar" style="--cse-pct: {{csePercent system.hero.xp system.nextLevelXP}}%"
+          data-tooltip-text="{{localize "DSCSE.XPProgress" xp=system.hero.xp next=system.nextLevelXP}}"></span>
+        {{/if}}
+      </div>
+      <div class="cse-stat-pair cse-stat-even">
+        <span class="cse-stat-label">{{systemFields.hero.fields.victories.label}}</span>
+        <span class="cse-stat-value">{{system.hero.victories}}{{#if system.victoriesMax}}<span class="cse-max"> / {{system.victoriesMax}}</span>{{/if}}</span>
+      </div>
+      {{else}}
+      <div class="cse-stat-pair cse-edit-pair">
+        {{formGroup systemFields.hero.fields.xp value=systemSource.hero.xp classes="xp stacked"}}
+        {{formGroup systemFields.hero.fields.victories value=systemSource.hero.victories classes="victories stacked"}}
+      </div>
+      {{/if}}
+      <div class="cse-stat-pair cse-stat-even cse-recovery-value" data-tooltip="DSCSE.RecoveryValueHint">
+        <span class="cse-stat-label">{{localize "DSCSE.RecoveryValue"}}</span>
+        <span class="cse-stat-value">{{system.recoveries.recoveryValue}}</span>
+      </div>
+    </div>
+
+    {{!-- Edit mode: the base values (source), edited inline; advancement picks are added on top by the system. --}}
+    <div class="cse-characteristics {{#unless isPlay}}editing{{/unless}}">
+      {{#each characteristics as |chr key|}}
+      {{#if @root.isPlay}}
+      <a class="cse-characteristic {{disabled (not @root.owner)}}" data-action="roll" data-roll-type="characteristic" data-characteristic="{{key}}"
+        data-tooltip-text="{{localize "DRAW_STEEL.ROLL.Prompt" prompt=chr.field.label}}">
+        <span class="cse-chr-value">{{numberFormat chr.value sign=true}}</span>
+        <span class="cse-chr-label">{{chr.field.label}}</span>
+      </a>
+      {{else}}
+      <label class="cse-characteristic edit" data-tooltip="{{chr.field.label}}">
+        {{formInput chr.field value=chr.value}}
+        <span class="cse-chr-label">{{chr.field.label}}</span>
+        {{#if chr.advancements}}
+        <span class="cse-chr-adv" data-tooltip="DRAW_STEEL.Actor.base.CharacteristicInput.Advancement">{{numberFormat chr.advancements sign=true}}</span>
+        {{/if}}
+      </label>
+      {{/if}}
+      {{/each}}
+    </div>
+    {{> cseCombatStrip}}
+  </div>
+</header>

@@ -1,0 +1,31 @@
+{{!-- Edit mode: one immunity / weakness card. Set entries edit in place (form inputs on the source data); the add
+     row (type + value, no names, so it never submits the form) sets one more type via cseAddDamageTrait. --}}
+<fieldset class="cse-damage-edit" data-cse-damage="{{kind}}">
+  <legend>{{label}}</legend>
+  {{#if entries.length}}
+  <ul class="cse-iw-rows">
+    {{#each entries as |entry|}}
+    <li class="cse-iw-row">
+      <label for="{{@root.rootId}}-{{../kind}}-{{entry.key}}">{{entry.label}}</label>
+      <input type="number" id="{{@root.rootId}}-{{../kind}}-{{entry.key}}" name="system.damage.{{../kind}}.{{entry.key}}" value="{{entry.value}}" min="0" step="1" data-source="true">
+      <button type="button" class="cse-icon-button" data-action="cseRemoveDamageTrait" data-type="{{entry.key}}" data-tooltip="DSCSE.RemoveTrait">
+        <i class="fa-solid fa-xmark" inert></i>
+      </button>
+    </li>
+    {{/each}}
+  </ul>
+  {{/if}}
+  {{#if options.length}}
+  <div class="cse-iw-add">
+    <select class="cse-iw-type" aria-label="{{localize "DSCSE.DamageType"}}">
+      {{#each options as |option|}}
+      <option value="{{option.key}}">{{option.label}}</option>
+      {{/each}}
+    </select>
+    <input type="number" class="cse-iw-value" value="1" min="1" step="1" aria-label="{{localize "DSCSE.Value"}}">
+    <button type="button" class="cse-icon-button" data-action="cseAddDamageTrait" data-tooltip="DSCSE.AddTrait">
+      <i class="fa-solid fa-plus" inert></i>
+    </button>
+  </div>
+  {{/if}}
+</fieldset>

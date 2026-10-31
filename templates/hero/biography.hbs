@@ -1,0 +1,41 @@
+{{! Biography Tab (languages live in the sidebar, so their input is not rendered twice) }}
+<section class="tab biography cse-tab standard-form {{tab.cssClass}}" data-group="primary" data-tab="biography">
+  {{#if isPlay}}
+  <div class="cse-card cse-demographics">
+    <div class="cse-stat-pair"><span class="cse-stat-label">{{systemFields.hero.fields.renown.label}}</span><span class="cse-stat-value">{{system.hero.renown}}</span></div>
+    <div class="cse-stat-pair"><span class="cse-stat-label">{{systemFields.hero.fields.wealth.label}}</span><span class="cse-stat-value">{{system.hero.wealth}}</span></div>
+    <div class="cse-stat-pair"><span class="cse-stat-label">{{systemFields.biography.fields.age.label}}</span><span class="cse-stat-value">{{system.biography.age}}</span></div>
+    <div class="cse-stat-pair"><span class="cse-stat-label">{{systemFields.biography.fields.height.label}}</span><span class="cse-stat-value">{{system.biography.height.value}} {{measurements.heightUnit}}</span></div>
+    <div class="cse-stat-pair"><span class="cse-stat-label">{{systemFields.biography.fields.weight.label}}</span><span class="cse-stat-value">{{system.biography.weight.value}} {{measurements.weightUnit}}</span></div>
+  </div>
+  {{else}}
+  <div class="flexrow rewards">
+    {{formGroup systemFields.hero.fields.renown value=systemSource.hero.renown dataset=datasets.isSource}}
+    {{formGroup systemFields.hero.fields.wealth value=systemSource.hero.wealth dataset=datasets.isSource}}
+  </div>
+  <div class="flexrow appearance">
+    {{formGroup systemFields.biography.fields.age value=systemSource.biography.age dataset=datasets.isSource}}
+    <div class="form-group inline">
+      <label>{{systemFields.biography.fields.height.label}}</label>
+      <div class="form-fields">
+        {{formInput systemFields.biography.fields.height.fields.value value=systemSource.biography.height.value dataset=datasets.isSource}}
+        {{formInput systemFields.biography.fields.height.fields.units value=systemSource.biography.height.units dataset=datasets.isSource options=measurements.heightOptions}}
+      </div>
+    </div>
+    <div class="form-group inline">
+      <label>{{systemFields.biography.fields.weight.label}}</label>
+      <div class="form-fields">
+        {{formInput systemFields.biography.fields.weight.fields.value value=systemSource.biography.weight.value dataset=datasets.isSource}}
+        {{formInput systemFields.biography.fields.weight.fields.units value=systemSource.biography.weight.units dataset=datasets.isSource options=measurements.weightOptions}}
+      </div>
+    </div>
+  </div>
+  {{/if}}
+  {{#if limited}}
+  {{> "systems/draw-steel/templates/sheets/actor/shared/partials/biography/languages.hbs"}}
+  {{/if}}
+  {{> "systems/draw-steel/templates/sheets/actor/shared/partials/biography/biography.hbs"}}
+  {{#if gm}}
+  {{> "systems/draw-steel/templates/sheets/actor/shared/partials/biography/director-notes.hbs"}}
+  {{/if}}
+</section>

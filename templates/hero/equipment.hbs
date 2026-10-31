@@ -1,0 +1,106 @@
+{{#*inline "kitDamageBonuses"}}
+{{#if (or damage.tier1 damage.tier2 damage.tier3)}}
+{{numberFormat damage.tier1 sign=true}} / {{numberFormat damage.tier2 sign=true}} / {{numberFormat damage.tier3 sign=true}}
+{{/if}}
+{{/inline}}
+
+{{! Equipment Tab }}
+<section class="tab equipment cse-tab {{tab.cssClass}}" data-group="primary" data-tab="equipment">
+  {{> cseActionBar tabId="equipment"}}
+  {{#if (or system.class.system.kits kits.length)}}
+  <section class="cse-table" data-cse-section="equipment.kits">
+    <header class="cse-table-header">
+      <a class="cse-table-toggle" data-action="cseToggleSection">
+        <i class="cse-chevron fa-solid fa-chevron-down" inert></i>
+        <h3>{{localize "TYPES.Item.kit"}}</h3>
+        <span class="cse-count">{{kits.length}}</span>
+      </a>
+      <div class="cse-col cse-col-bonus">{{kitFields.bonuses.fields.melee.fields.damage.label}}</div>
+      <div class="cse-col cse-col-bonus">{{kitFields.bonuses.fields.ranged.fields.damage.label}}</div>
+      <div class="cse-col cse-col-controls">
+        {{#unless isPlay}}
+        <a class="createDoc" data-action="createDoc" data-document-class="Item" data-type="kit" data-render-sheet="true" data-tooltip-text="{{localize "DRAW_STEEL.SHEET.Add" itemName=(localize "TYPES.Item.kit")}}">
+          <i class="fa-solid fa-plus" inert></i>
+        </a>
+        {{/unless}}
+      </div>
+    </header>
+    <ol class="cse-rows">
+      {{#each kits as |kitContext|}}
+      <li class="item feature draggable expandable-document cse-row" data-document-uuid="{{kitContext.item.uuid}}">
+        <div class="cse-row-main" data-action="cseToggleRow">
+          <div class="cse-cell cse-cell-name">
+            <span class="cse-item-img"><img src="{{kitContext.item.img}}" alt="" loading="lazy"></span>
+            <div class="name">
+              <div class="label">
+                {{kitContext.item.name}}
+                {{#if (eq @root.system.hero.preferredKit kitContext.item.id)}}
+                <i data-tooltip="DRAW_STEEL.Item.kit.PreferredKit.Label" class="cse-preferred fa-solid fa-star"></i>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+          <div class="cse-cell cse-col-bonus">{{> kitDamageBonuses damage=kitContext.item.system.bonuses.melee.damage}}</div>
+          <div class="cse-cell cse-col-bonus">{{> kitDamageBonuses damage=kitContext.item.system.bonuses.ranged.damage}}</div>
+          <div class="cse-cell cse-col-controls">
+            <a class="fa-fw fa-solid fa-ellipsis-vertical" data-action="documentListContext"></a>
+          </div>
+        </div>
+        <div class="document-description item-embed {{#if kitContext.expanded}}expanded{{/if}}">
+          {{#if kitContext.expanded}}{{{kitContext.embed.outerHTML}}}{{/if}}
+        </div>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+  {{/if}}
+
+  {{#each treasure as |treasureType|}}
+  {{#if treasureType.showHeader}}
+  <section class="cse-table" data-cse-section="equipment.treasure.{{@key}}">
+    <header class="cse-table-header">
+      <a class="cse-table-toggle" data-action="cseToggleSection">
+        <i class="cse-chevron fa-solid fa-chevron-down" inert></i>
+        <h3>{{treasureType.label}}</h3>
+        <span class="cse-count">{{treasureType.treasure.length}}</span>
+      </a>
+      <div class="cse-col cse-col-echelon">{{@root.treasureFields.echelon.label}}</div>
+      <div class="cse-col cse-col-quantity">{{@root.treasureFields.quantity.label}}</div>
+      <div class="cse-col cse-col-controls">
+        {{#if treasureType.showAdd}}
+        <a class="createDoc" data-action="createDoc" data-document-class="Item" data-type="treasure" data-render-sheet="true" data-system.category="{{@key}}" data-tooltip-text="{{localize "DRAW_STEEL.SHEET.Add" itemName=(localize "TYPES.Item.treasure")}}">
+          <i class="fa-solid fa-plus" inert></i>
+        </a>
+        {{/if}}
+      </div>
+    </header>
+    <ol class="cse-rows">
+      {{#each treasureType.treasure as |treasureContext|}}
+      <li class="item treasure draggable expandable-document cse-row" data-document-uuid="{{treasureContext.item.uuid}}">
+        <div class="cse-row-main" data-action="cseToggleRow">
+          <div class="cse-cell cse-cell-name">
+            <span class="cse-item-img"><img src="{{treasureContext.item.img}}" alt="" loading="lazy"></span>
+            <div class="name">
+              <div class="label">{{treasureContext.item.name}}</div>
+            </div>
+          </div>
+          <div class="cse-cell cse-col-echelon">{{localize (concat "DRAW_STEEL.ECHELON." treasureContext.item.system.echelon)}}</div>
+          <div class="cse-cell cse-col-quantity quantity-controls">
+            <a data-action="modifyItemQuantity" data-quantity-modification="decrease"><i class="fa-regular fa-minus" inert></i></a>
+            <span class="quantity">{{treasureContext.item.system.quantity}}</span>
+            <a data-action="modifyItemQuantity" data-quantity-modification="increase"><i class="fa-regular fa-plus" inert></i></a>
+          </div>
+          <div class="cse-cell cse-col-controls">
+            <a class="fa-fw fa-solid fa-ellipsis-vertical" data-action="documentListContext"></a>
+          </div>
+        </div>
+        <div class="document-description item-embed {{#if treasureContext.expanded}}expanded{{/if}}">
+          {{#if treasureContext.expanded}}{{{treasureContext.embed.outerHTML}}}{{/if}}
+        </div>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+  {{/if}}
+  {{/each}}
+</section>

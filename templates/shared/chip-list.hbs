@@ -1,0 +1,10 @@
+{{!-- A wrapping list of chips. Params: items (strings or {label, value}), kind (chip modifier class). --}}
+{{#if items.length}}
+<ul class="cse-chips">
+  {{#each items as |item|}}
+  <li class="cse-chip {{../kind}}">{{#if item.label}}{{item.label}} <strong>{{item.value}}</strong>{{else}}{{item}}{{/if}}</li>
+  {{/each}}
+</ul>
+{{else}}
+<span class="cse-chips-none">{{localize "COMMON.None"}}</span>
+{{/if}}

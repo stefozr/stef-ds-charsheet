@@ -1,0 +1,54 @@
+{
+  "DSCSE": {
+    "Sheet": {
+      "Hero": "Evolved Hero Sheet",
+      "Npc": "Evolved Monster Sheet"
+    },
+    "Settings": {
+      "DefaultSheet": {
+        "Name": "Evolved sheets: use as default",
+        "Hint": "Use the Evolved hero and monster sheets as the default sheets for heroes and monsters (unticked: the Draw Steel sheets). Same as choosing them in Configure Default Sheets; actors with their own sheet choice keep it. Applies to everyone in the world."
+      },
+      "AccentColor": {
+        "Name": "Evolved sheets: accent colour",
+        "Hint": "Colour of the table headers, the active tab underline and the level badge on Evolved hero and monster sheets. Per client."
+      },
+      "PortraitShape": {
+        "Name": "Evolved sheets: portrait shape",
+        "Hint": "How the portrait above the vitals strip is framed. Per client.",
+        "Square": "Square",
+        "Round": "Round",
+        "Transparent": "No frame"
+      },
+      "ClassArt": {
+        "Name": "Evolved sheets: class art in the header",
+        "Hint": "Show the hero's class artwork behind the hero sheet header (the header then uses dark colours). Heroes without a class, or with a class that has no artwork, keep the plain header. Per client."
+      }
+    },
+    "Search": "Search",
+    "ExpandAll": "Expand all sections",
+    "CollapseAll": "Collapse all sections",
+    "ToggleSidebar": "Show or hide the sidebar",
+    "RemoveOrigin": "Remove",
+    "EditMetadata": "Edit keywords, organization and role",
+    "RecoveryValue": "Recovery",
+    "Roll": "Use / roll",
+    "RespiteConfirm": "Take a respite? {name} regains all Stamina and Recoveries, and Victories ({victories}) are converted into Experience.",
+    "On": "On",
+    "Off": "Off",
+    "OtherSkills": "Other",
+    "PotencyAbbr": {
+      "Weak": "W",
+      "Average": "A",
+      "Strong": "S"
+    },
+    "XPProgress": "{xp} of {next} XP to the next level",
+    "RecoveryValueHint": "Stamina regained per recovery",
+    "SpendRecoveryTitle": "Spend a recovery",
+    "SpendRecoveryConfirm": "{name} will regain {value} Stamina and will have {left} out of {total} recoveries left.",
+    "AddTrait": "Add",
+    "RemoveTrait": "Remove",
+    "DamageType": "Damage type",
+    "Value": "Value"
+  }
+}

@@ -1,0 +1,57 @@
+{{! Effects Tab }}
+<section class="tab effects cse-tab {{tab.cssClass}}" data-group="primary" data-tab="effects">
+  <section class="cse-card cse-statuses">
+    <h4 class="cse-card-title">{{localize "DRAW_STEEL.ActiveEffect.StatusConditions"}}</h4>
+    <div class="cse-status-grid">
+      {{#each statuses as |status id|}}
+      <button type="button" class="status-control cse-status {{status.active}}" {{disabled status.disabled}} data-status-id="{{id}}" data-tooltip-html="{{status.tooltip}}" data-action="toggleStatus">
+        <img src="{{status.img}}" alt="">
+        <span>{{status.name}}</span>
+      </button>
+      {{/each}}
+    </div>
+  </section>
+  {{> cseActionBar tabId="effects"}}
+  {{!-- .effect-list-container .effect-create: the system binds its "create effect" menu to this selector. --}}
+  <div class="effect-list-container cse-effects">
+    {{#each effects as |section sid|}}
+    <section class="cse-table" data-cse-section="effects.{{section.type}}" data-effect-type="{{section.type}}">
+      <header class="cse-table-header">
+        <a class="cse-table-toggle" data-action="cseToggleSection">
+          <i class="cse-chevron fa-solid fa-chevron-down" inert></i>
+          <h3>{{section.label}}</h3>
+          <span class="cse-count">{{section.effects.length}}</span>
+        </a>
+        <div class="cse-col cse-col-source">{{localize "DRAW_STEEL.ActiveEffect.Source"}}</div>
+        <div class="cse-col cse-col-duration">{{localize "EFFECT.TABS.duration"}}</div>
+        <div class="cse-col cse-col-controls">
+          <a class="effect-control effect-create fa-solid fa-fw fa-plus"
+            {{#if (eq section.type "inactive")}}data-disabled="true"{{else if (eq section.type "temporary")}}data-system.end.type="turn"{{/if}}></a>
+        </div>
+      </header>
+      <ol class="cse-rows">
+        {{#each section.effects as |effect|}}
+        <li class="effect draggable expandable-document cse-row" data-document-uuid="{{effect.uuid}}">
+          <div class="cse-row-main" data-action="cseToggleRow">
+            <div class="cse-cell cse-cell-name">
+              <span class="cse-item-img"><img src="{{effect.img}}" alt="" loading="lazy"></span>
+              <div class="name">
+                <div class="label">{{effect.name}}</div>
+              </div>
+            </div>
+            <div class="cse-cell cse-col-source">{{effect.sourceName}}</div>
+            <div class="cse-cell cse-col-duration">{{effect.durationLabel}}</div>
+            <div class="cse-cell cse-col-controls">
+              <a class="fa-fw fa-solid fa-ellipsis-vertical" data-action="documentListContext"></a>
+            </div>
+          </div>
+          <div class="document-description effect-description {{#if effect.expanded}}expanded{{/if}}">
+            {{#if effect.expanded}}{{{effect.enrichedDescription.outerHTML}}}{{/if}}
+          </div>
+        </li>
+        {{/each}}
+      </ol>
+    </section>
+    {{/each}}
+  </div>
+</section>

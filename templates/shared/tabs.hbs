@@ -1,0 +1,15 @@
+{{!-- Tab strip with the sidebar toggle on its left Same tab markup as Foundry's generic template. --}}
+<div class="cse-tabs-row">
+  {{#unless limited}}
+  <button type="button" class="cse-sidebar-toggle cse-icon-button" data-action="cseToggleSidebar" data-tooltip="DSCSE.ToggleSidebar">
+    <i class="fa-solid fa-sidebar" inert></i>
+  </button>
+  {{/unless}}
+  <nav class="sheet-tabs tabs cse-tabs" aria-roledescription="{{localize "SHEETS.FormNavLabel"}}">
+    {{#each tabs as |tab|}}
+    <a data-action="tab" data-group="{{tab.group}}" data-tab="{{tab.id}}" {{#if tab.cssClass}}class="{{tab.cssClass}}"{{/if}}>
+      <span>{{localize tab.label}}</span>
+    </a>
+    {{/each}}
+  </nav>
+</div>

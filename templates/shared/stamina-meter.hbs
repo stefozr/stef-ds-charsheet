@@ -1,0 +1,40 @@
+{{!-- Stamina for the vitals strip: heading row (label + temporary Stamina), then the bar with value / max.
+      Context `vitals` comes from EvolvedSheetMixin#_prepareVitals. --}}
+<div class="cse-stamina {{#if vitals.winded}}winded{{/if}} {{#if vitals.dying}}dying{{/if}}">
+  <div class="cse-stamina-head">
+    {{#if editableHeroStamina}}
+    <button type="button" class="cse-meter-label" data-action="spendStaminaHeroToken" data-tooltip="DRAW_STEEL.Setting.HeroTokens.RegainStamina.tooltip">
+      <i class="fa-solid fa-circle-bolt" inert></i> {{systemFields.stamina.label}}
+    </button>
+    {{else}}
+    <span class="cse-meter-label">{{systemFields.stamina.label}}</span>
+    {{/if}}
+    {{#if isPlay}}
+    <label class="cse-temp" data-tooltip="{{systemFields.stamina.fields.temporary.label}}">
+      <i class="fa-solid fa-shield-heart" inert></i>
+      {{formInput systemFields.stamina.fields.temporary value=system.stamina.temporary dataset=datasets.notSource placeholder="0"}}
+    </label>
+    {{/if}}
+  </div>
+  <div class="cse-meter" style="--cse-pct: {{vitals.pct}}%; --cse-temp-pct: {{vitals.tempPct}}%;">
+    <div class="cse-meter-fill"></div>
+    <div class="cse-meter-temp"></div>
+    <div class="cse-meter-values">
+      {{#if isPlay}}
+      {{#if vitals.isSquad}}
+      {{formInput combatGroup.system.schema.fields.staminaValue value=combatGroup.system.staminaValue name="squadStaminaValue"}}
+      {{else}}
+      {{formInput systemFields.stamina.fields.value value=system.stamina.value dataset=datasets.notSource}}
+      {{/if}}
+      <span class="cse-max">/ {{vitals.max}}</span>
+      {{else if vitals.editMax}}
+      <span>{{vitals.value}}</span>
+      <span class="cse-max">/</span>
+      {{formInput systemFields.stamina.fields.max value=systemSource.stamina.max dataset=datasets.isSource}}
+      {{else}}
+      <span>{{vitals.value}}</span>
+      <span class="cse-max">/ {{vitals.max}}</span>
+      {{/if}}
+    </div>
+  </div>
+</div>

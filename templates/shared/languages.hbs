@@ -1,0 +1,17 @@
+{{!-- Languages: chips in play mode, the system input in edit mode (same legend and fill-trait button as the system
+     partial biography/languages.hbs). --}}
+{{#if isPlay}}
+<fieldset class="cse-chip-card">
+  <legend>
+    {{systemFields.biography.fields.languages.label}}
+    {{#if unfilledLanguage}}
+    <button type="button" class="icon fa-solid fa-message-question"
+      data-tooltip-text="{{localize "DRAW_STEEL.ADVANCEMENT.FillTrait.button" type=(localize "TYPES.Advancement.language")}}"
+      data-action="fillTrait" data-type="language"></button>
+    {{/if}}
+  </legend>
+  {{> cseChipList items=cseChips.languages kind="language"}}
+</fieldset>
+{{else}}
+{{> "systems/draw-steel/templates/sheets/actor/shared/partials/biography/languages.hbs"}}
+{{/if}}

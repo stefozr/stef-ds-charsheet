@@ -1,0 +1,84 @@
+<header class="cse-header" style="
+  {{#if avatarProperties.objectFit}} --avatar-object-fit: {{avatarProperties.objectFit}}; {{/if}}
+  {{#if avatarProperties.objectPosition}} --avatar-object-position: {{avatarProperties.objectPosition}}; {{/if}}
+  ">
+  <div class="cse-vitals-container">
+    <div class="cse-portrait">
+      <img src="{{document.img}}" alt="{{document.name}}" data-action="{{ifThen isPlay "showPortraitArtwork" "editImage"}}" {{#unless isPlay}}data-edit="img"{{/unless}} title="{{document.name}}">
+    </div>
+    <div class="cse-vitals">
+      {{> cseStaminaMeter}}
+    </div>
+  </div>
+
+  <div class="cse-header-main">
+    <div class="cse-name-row">
+      {{#if isPlay}}
+      <h1 class="cse-name">{{document.name}}</h1>
+      {{else}}
+      {{formInput fields.name value=source.name placeholder=(localize "DOCUMENT.FIELDS.name.label") classes="cse-name-input"}}
+      {{/if}}
+      {{#if system.source.label}}<span class="cse-source">{{system.source.label}}</span>{{/if}}
+    </div>
+
+    <div class="cse-origins">
+      {{#each monsterKeywords as |keyword|}}
+      <span class="cse-origin cse-keyword">{{keyword}}</span>
+      {{/each}}
+      {{#if system.monster.organizationLabel}}<span class="cse-origin">{{system.monster.organizationLabel}}</span>{{/if}}
+      {{#if system.monster.roleLabel}}<span class="cse-origin">{{system.monster.roleLabel}}</span>{{/if}}
+      {{#unless isPlay}}
+      <a class="cse-origin cse-origin-empty" data-action="editMonsterMetadata" data-tooltip="DSCSE.EditMetadata"><i class="fa-solid fa-gear" inert></i></a>
+      {{/unless}}
+    </div>
+
+    <div class="cse-level-row">
+      <div class="cse-level-block">
+        <span class="cse-level-label">{{systemFields.monster.fields.level.label}}</span>
+        <span class="cse-level-value">{{systemSource.monster.level}}</span>
+      </div>
+      <div class="cse-stat-pair">
+        <span class="cse-stat-label">{{localize "DRAW_STEEL.Actor.base.EVLabel.Label"}}</span>
+        <span class="cse-stat-value">{{system.evLabel}}</span>
+      </div>
+      <div class="cse-stat-pair cse-free-strike">
+        <span class="cse-stat-label">{{systemFields.monster.fields.freeStrike.label}}</span>
+        {{#if isPlay}}
+        {{#if gm}}
+        <button type="button" class="cse-strike-button" data-action="freeStrike" data-tooltip="{{systemFields.monster.fields.freeStrike.label}}">
+          <i class="fa-solid fa-burst" inert></i> {{system.monster.freeStrike}}
+        </button>
+        {{else}}
+        <span class="cse-stat-value">{{system.monster.freeStrike}}</span>
+        {{/if}}
+        {{else}}
+        {{formInput systemFields.monster.fields.freeStrike value=systemSource.monster.freeStrike dataset=datasets.isSource}}
+        {{/if}}
+      </div>
+      {{#if showMalice}}
+      <label class="cse-stat-pair cse-malice">
+        <span class="cse-stat-label">{{malice.label}}</span>
+        <input type="number" step="1" data-setting="malice" value="{{malice.value}}">
+      </label>
+      {{/if}}
+    </div>
+
+    <div class="cse-characteristics {{#unless isPlay}}editing{{/unless}}">
+      {{#each characteristics as |chr key|}}
+      {{#if @root.isPlay}}
+      <a class="cse-characteristic {{disabled (not @root.owner)}}" data-action="roll" data-roll-type="characteristic" data-characteristic="{{key}}"
+        data-tooltip-text="{{localize "DRAW_STEEL.ROLL.Prompt" prompt=chr.field.label}}">
+        <span class="cse-chr-value">{{numberFormat chr.value sign=true}}</span>
+        <span class="cse-chr-label">{{chr.field.label}}</span>
+      </a>
+      {{else}}
+      <label class="cse-characteristic edit" data-tooltip="{{chr.field.label}}">
+        {{formInput chr.field value=chr.value}}
+        <span class="cse-chr-label">{{chr.field.label}}</span>
+      </label>
+      {{/if}}
+      {{/each}}
+    </div>
+    {{> cseCombatStrip}}
+  </div>
+</header>

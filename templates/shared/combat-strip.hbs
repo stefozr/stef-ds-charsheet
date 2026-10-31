@@ -1,0 +1,71 @@
+{{!-- Combat strip under the characteristics: combat, movement and potency. Play: values. Edit: inputs on the source
+     data (same paths as the system Stats partials), movement types as icon toggles; potency is derived. --}}
+<div class="cse-combat-strip {{#unless isPlay}}editing{{/unless}}">
+  <div class="cse-strip-tile cse-strip-size" data-tooltip-html="{{combatTooltip}}">
+    <span class="cse-strip-label">{{systemFields.combat.fields.size.label}}</span>
+    {{#if isPlay}}
+    <span class="cse-strip-value">{{system.combat.size}}</span>
+    {{else}}
+    <span class="cse-strip-inputs">
+      {{formInput systemFields.combat.fields.size.fields.value value=systemSource.combat.size.value dataset=datasets.isSource}}
+      {{#if (eq systemSource.combat.size.value 1)}}
+      <select name="system.combat.size.letter" data-source="true">
+        {{#each cseSizeLetters as |size|}}
+        <option value="{{size.key}}" title="{{size.label}}" {{#if size.selected}}selected{{/if}}>{{size.key}}</option>
+        {{/each}}
+      </select>
+      {{/if}}
+    </span>
+    {{/if}}
+  </div>
+  <div class="cse-strip-tile" data-tooltip-html="{{combatTooltip}}">
+    <span class="cse-strip-label">{{systemFields.combat.fields.stability.label}}</span>
+    {{#if isPlay}}
+    <span class="cse-strip-value">{{system.combat.stability}}</span>
+    {{else}}
+    {{formInput systemFields.combat.fields.stability value=systemSource.combat.stability dataset=datasets.isSource}}
+    <button type="button" class="cse-strip-gear" data-action="editCombat" data-tooltip="DRAW_STEEL.Actor.base.NicheCombatDialog.EditTooltip">
+      <i class="fa-solid fa-gear" inert></i>
+    </button>
+    {{/if}}
+  </div>
+  <div class="cse-strip-tile">
+    <span class="cse-strip-label">{{systemFields.movement.fields.value.label}}</span>
+    {{#if isPlay}}
+    <span class="cse-strip-value">{{system.movement.value}}</span>
+    {{#if movement.list}}<span class="cse-strip-sub" data-tooltip-text="{{movement.list}}">{{movement.list}}</span>{{/if}}
+    {{else}}
+    {{formInput systemFields.movement.fields.value value=systemSource.movement.value dataset=datasets.isSource}}
+    <span class="cse-move-toggles">
+      {{#each cseMovement as |type|}}
+      <button type="button" class="cse-move-toggle {{#if type.active}}active{{/if}}" data-action="cseToggleMovement" data-movement="{{type.key}}"
+        data-tooltip-text="{{type.label}}" aria-label="{{type.label}}" aria-pressed="{{type.active}}">
+        <i class="fa-solid {{type.icon}}" inert></i>
+      </button>
+      {{/each}}
+      {{#if cseCanHover}}
+      <button type="button" class="cse-move-toggle {{#if cseHover}}active{{/if}}" data-action="cseToggleMovement" data-movement="hover"
+        data-tooltip="DRAW_STEEL.Actor.base.FIELDS.movement.hover.label" aria-pressed="{{cseHover}}">
+        <i class="fa-solid fa-wind" inert></i>
+      </button>
+      {{/if}}
+    </span>
+    {{/if}}
+  </div>
+  <div class="cse-strip-tile">
+    <span class="cse-strip-label">{{systemFields.movement.fields.disengage.label}}</span>
+    {{#if isPlay}}
+    <span class="cse-strip-value">{{system.movement.disengage}}</span>
+    {{else}}
+    {{formInput systemFields.movement.fields.disengage value=systemSource.movement.disengage dataset=datasets.isSource}}
+    {{/if}}
+  </div>
+  <div class="cse-strip-tile cse-strip-potency">
+    <span class="cse-strip-label">{{localize "DRAW_STEEL.Item.ability.Potency.label"}}</span>
+    <span class="cse-strip-value">
+      <span data-tooltip="DRAW_STEEL.Item.ability.Potency.Weak"><small>{{localize "DSCSE.PotencyAbbr.Weak"}}</small>{{system.potency.weak}}</span>
+      <span data-tooltip="DRAW_STEEL.Item.ability.Potency.Average"><small>{{localize "DSCSE.PotencyAbbr.Average"}}</small>{{system.potency.average}}</span>
+      <span data-tooltip="DRAW_STEEL.Item.ability.Potency.Strong"><small>{{localize "DSCSE.PotencyAbbr.Strong"}}</small>{{system.potency.strong}}</span>
+    </span>
+  </div>
+</div>

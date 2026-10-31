@@ -1,0 +1,13 @@
+{{!-- Search + expand/collapse for one tab. Param: tabId. The search input has no name, so it is never submitted. --}}
+<div class="cse-action-bar">
+  <label class="cse-search-field">
+    <i class="fa-solid fa-magnifying-glass" inert></i>
+    <input type="search" class="cse-search" data-cse-tab="{{tabId}}" placeholder="{{localize "DSCSE.Search"}}" autocomplete="off">
+  </label>
+  <button type="button" class="cse-icon-button" data-action="cseExpandAll" data-tooltip="DSCSE.ExpandAll">
+    <i class="fa-solid fa-angles-down" inert></i>
+  </button>
+  <button type="button" class="cse-icon-button" data-action="cseCollapseAll" data-tooltip="DSCSE.CollapseAll">
+    <i class="fa-solid fa-angles-up" inert></i>
+  </button>
+</div>

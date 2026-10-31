@@ -1,0 +1,29 @@
+{{!-- Sidebar. Play: With Captain + traits as chips (combat, movement and potency are in the header strip). Edit: immunity /
+     weakness editors and languages (combat and movement are edited in the header strip). --}}
+<aside class="cse-sidebar {{#if isPlay}}play{{else}}edit standard-form{{/if}}">
+  {{#if (and isPlay withCaptain.exists)}}
+  <fieldset class="with-captain cse-with-captain">
+    <legend>{{localize "DRAW_STEEL.ActiveEffect.WithCaptainEffects.embedLabel"}}</legend>
+    <button type="button" id="{{concat rootId "-withCaptainToggle"}}" data-action="toggleWithCaptainEffect" data-effect-id="{{withCaptain.effectId}}">
+      <i class="fa-solid fa-lg {{ifThen withCaptain.effectEnabled "fa-toggle-on" "fa-toggle-off"}}" inert></i>
+      {{ifThen withCaptain.effectEnabled (localize "DSCSE.On") (localize "DSCSE.Off")}}
+    </button>
+    {{#if withCaptain.description}}
+    <label class="cse-captain-text" for="{{concat rootId "-withCaptainToggle"}}">{{{withCaptain.description}}}</label>
+    {{/if}}
+  </fieldset>
+  {{/if}}
+  {{#if isPlay}}
+  <fieldset class="cse-chip-card">
+    <legend>{{systemFields.damage.fields.immunities.label}}</legend>
+    {{> cseChipList items=cseChips.immunities kind="immunity"}}
+  </fieldset>
+  <fieldset class="cse-chip-card">
+    <legend>{{systemFields.damage.fields.weaknesses.label}}</legend>
+    {{> cseChipList items=cseChips.weaknesses kind="weakness"}}
+  </fieldset>
+  {{else}}
+  {{#each cseDamageEdit as |card|}}{{> cseDamageTraitsEdit card}}{{/each}}
+  {{/if}}
+  {{> cseLanguages}}
+</aside>

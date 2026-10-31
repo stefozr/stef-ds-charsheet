@@ -1,0 +1,86 @@
+{{! Projects Tab }}
+<section class="tab projects cse-tab {{tab.cssClass}}" data-group="primary" data-tab="projects">
+  {{> cseActionBar tabId="projects"}}
+  <section class="cse-table" data-cse-section="projects.followers">
+    <header class="cse-table-header">
+      <a class="cse-table-toggle" data-action="cseToggleSection">
+        <i class="cse-chevron fa-solid fa-chevron-down" inert></i>
+        <h3>{{localize "TYPES.Item.follower"}}</h3>
+        <span class="cse-count">{{followers.length}}</span>
+      </a>
+      <div class="cse-col cse-col-type">{{followerFields.type.label}}</div>
+      <div class="cse-col cse-col-controls">
+        {{#unless isPlay}}
+        <a class="createDoc" data-action="createDoc" data-document-class="Item" data-type="follower" data-render-sheet="true" data-tooltip-text="{{localize "DRAW_STEEL.SHEET.Add" itemName=(localize "TYPES.Item.follower")}}">
+          <i class="fa-solid fa-plus" inert></i>
+        </a>
+        {{/unless}}
+      </div>
+    </header>
+    <ol class="cse-rows">
+      {{#each followers as |followerContext|}}
+      <li class="item project draggable expandable-document cse-row" data-document-uuid="{{followerContext.item.uuid}}">
+        <div class="cse-row-main" data-action="cseToggleRow">
+          <div class="cse-cell cse-cell-name">
+            <span class="cse-item-img rollable {{disabled (not @root.owner)}}" data-action="rollFollower" data-tooltip="DSCSE.Roll"><img src="{{followerContext.item.img}}" alt="" loading="lazy"><i class="cse-use fa-solid fa-dice" inert></i></span>
+            <div class="name">
+              <div class="label">{{followerContext.item.name}}</div>
+            </div>
+          </div>
+          <div class="cse-cell cse-col-type">{{followerContext.item.system.followerType}}</div>
+          <div class="cse-cell cse-col-controls">
+            <a class="fa-fw fa-solid fa-ellipsis-vertical" data-action="documentListContext"></a>
+          </div>
+        </div>
+        <div class="document-description item-embed {{#if followerContext.expanded}}expanded{{/if}}">
+          {{#if followerContext.expanded}}{{{followerContext.embed.outerHTML}}}{{/if}}
+        </div>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+
+  <section class="cse-table" data-cse-section="projects.projects">
+    <header class="cse-table-header">
+      <a class="cse-table-toggle" data-action="cseToggleSection">
+        <i class="cse-chevron fa-solid fa-chevron-down" inert></i>
+        <h3>{{localize "TYPES.Item.project"}}</h3>
+        <span class="cse-count">{{projects.length}}</span>
+      </a>
+      <div class="cse-col cse-col-points">{{projectFields.points.label}}</div>
+      <div class="cse-col cse-col-type">{{projectFields.type.label}}</div>
+      <div class="cse-col cse-col-controls">
+        {{#unless isPlay}}
+        <a class="createDoc" data-action="createDoc" data-document-class="Item" data-type="project" data-render-sheet="true" data-tooltip-text="{{localize "DRAW_STEEL.SHEET.Add" itemName=(localize "TYPES.Item.project")}}">
+          <i class="fa-solid fa-plus" inert></i>
+        </a>
+        {{/unless}}
+      </div>
+    </header>
+    <ol class="cse-rows">
+      {{#each projects as |projectContext|}}
+      <li class="item project draggable expandable-document cse-row" data-document-uuid="{{projectContext.item.uuid}}">
+        <div class="cse-row-main" data-action="cseToggleRow">
+          <div class="cse-cell cse-cell-name">
+            <span class="cse-item-img rollable {{disabled (not @root.owner)}}" data-action="rollProject" data-tooltip="DSCSE.Roll"><img src="{{projectContext.item.img}}" alt="" loading="lazy"><i class="cse-use fa-solid fa-dice" inert></i></span>
+            <div class="name">
+              <div class="label">{{projectContext.item.name}}</div>
+            </div>
+          </div>
+          <div class="cse-cell cse-col-points">
+            <span class="cse-progress" style="--cse-pct: {{csePercent projectContext.item.system.points projectContext.item.system.goal}}%"></span>
+            {{projectContext.item.system.points}} / {{ifThen projectContext.item.system.goal projectContext.item.system.goal (localize "DRAW_STEEL.Item.project.Varies")}}
+          </div>
+          <div class="cse-cell cse-col-type">{{projectContext.item.system.projectType}}</div>
+          <div class="cse-cell cse-col-controls">
+            <a class="fa-fw fa-solid fa-ellipsis-vertical" data-action="documentListContext"></a>
+          </div>
+        </div>
+        <div class="document-description item-embed {{#if projectContext.expanded}}expanded{{/if}}">
+          {{#if projectContext.expanded}}{{{projectContext.embed.outerHTML}}}{{/if}}
+        </div>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+</section>

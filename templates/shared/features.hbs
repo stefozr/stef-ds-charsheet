@@ -1,0 +1,81 @@
+{{! Features Tab (hero adds complications above the feature table) }}
+<section class="tab features cse-tab {{tab.cssClass}}" data-group="primary" data-tab="features">
+  {{> cseActionBar tabId="features"}}
+  {{#if complications.showHeader}}
+  <section class="cse-table" data-cse-section="features.complications">
+    <header class="cse-table-header">
+      <a class="cse-table-toggle" data-action="cseToggleSection">
+        <i class="cse-chevron fa-solid fa-chevron-down" inert></i>
+        <h3>{{complications.label}}</h3>
+        <span class="cse-count">{{complications.complications.length}}</span>
+      </a>
+      <div class="cse-col cse-col-controls">
+        {{#if complications.showAdd}}
+        <a class="createDoc" data-action="createDoc" data-document-class="Item" data-type="complication" data-render-sheet="true" data-tooltip-text="{{localize "DRAW_STEEL.SHEET.Add" itemName=complications.label}}">
+          <i class="fa-solid fa-plus" inert></i>
+        </a>
+        {{/if}}
+      </div>
+    </header>
+    <ol class="cse-rows">
+      {{#each complications.complications as |complicationContext|}}
+      <li class="item complication draggable expandable-document cse-row" data-document-uuid="{{complicationContext.item.uuid}}">
+        <div class="cse-row-main" data-action="cseToggleRow">
+          <div class="cse-cell cse-cell-name">
+            <span class="cse-item-img"><img src="{{complicationContext.item.img}}" alt="" loading="lazy"></span>
+            <div class="name">
+              <div class="label">{{complicationContext.item.name}}</div>
+            </div>
+          </div>
+          <div class="cse-cell cse-col-controls">
+            <a class="fa-fw fa-solid fa-ellipsis-vertical" data-action="documentListContext"></a>
+          </div>
+        </div>
+        <div class="document-description item-embed {{#if complicationContext.expanded}}expanded{{/if}}">
+          {{#if complicationContext.expanded}}{{{complicationContext.embed.outerHTML}}}{{/if}}
+        </div>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+  {{/if}}
+
+  <section class="cse-table" data-cse-section="features.features">
+    <header class="cse-table-header">
+      <a class="cse-table-toggle" data-action="cseToggleSection">
+        <i class="cse-chevron fa-solid fa-chevron-down" inert></i>
+        <h3>{{localize "TYPES.Item.feature"}}</h3>
+        <span class="cse-count">{{features.length}}</span>
+      </a>
+      <div class="cse-col cse-col-type">{{localize "DOCUMENT.FIELDS.type.label"}}</div>
+      <div class="cse-col cse-col-controls">
+        {{#unless isPlay}}
+        <a class="createDoc" data-action="createDoc" data-document-class="Item" data-type="feature" data-render-sheet="true" data-tooltip-text="{{localize "DRAW_STEEL.SHEET.Add" itemName=(localize "TYPES.Item.feature")}}">
+          <i class="fa-solid fa-plus" inert></i>
+        </a>
+        {{/unless}}
+      </div>
+    </header>
+    <ol class="cse-rows">
+      {{#each features as |featureContext|}}
+      <li class="item feature draggable expandable-document cse-row" data-document-uuid="{{featureContext.item.uuid}}">
+        <div class="cse-row-main" data-action="cseToggleRow">
+          <div class="cse-cell cse-cell-name">
+            <span class="cse-item-img"><img src="{{featureContext.item.img}}" alt="" loading="lazy"></span>
+            <div class="name">
+              <div class="label">{{featureContext.item.name}}</div>
+            </div>
+          </div>
+          <div class="cse-cell cse-col-type">{{localize featureContext.typeLabel}}</div>
+          <div class="cse-cell cse-col-controls">
+            <a class="fa-fw fa-solid fa-ellipsis-vertical" data-action="documentListContext"></a>
+          </div>
+        </div>
+        <div class="document-description item-embed {{#if featureContext.expanded}}expanded{{/if}}">
+          {{#if featureContext.expanded}}{{{featureContext.embed.outerHTML}}}{{/if}}
+        </div>
+      </li>
+      {{/each}}
+    </ol>
+  </section>
+</section>
