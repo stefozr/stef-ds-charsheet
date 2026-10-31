@@ -5,16 +5,8 @@ All notable changes to this module are documented here. The format follows
 
 ## [1.0.0] - 2026-10-31
 
-First public release. The module was renamed from "Draw Steel: Tidy Sheet" (`ds-tidy-sheet`) to
-"Stef's Character Sheets Evolved for Draw Steel" (`stef-ds-charsheet`); the sheets are now the Evolved Hero Sheet and
+First public release. The sheets are the Evolved Hero Sheet and
 the Evolved Monster Sheet.
-
-### Upgrading from Draw Steel: Tidy Sheet
-- On the first load the GM's client imports the old module's data: the world setting *use as default*, each user's
-  client settings (accent colour, portrait shape, class art, sidebar), the default hero and monster sheets in
-  *Configure Default Sheets*, and every actor's own sheet choice that named one of the old sheets.
-- Rerun it with `game.modules.get("stef-ds-charsheet").api.migrateLegacy({ dryRun: true })` to see what it would
-  move.
 
 ### Features
 - Compact hero and monster sheets built on the Draw Steel system's own sheets: every roll, action and drop behaves

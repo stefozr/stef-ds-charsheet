@@ -82,23 +82,6 @@ The sidebar's open or closed state is remembered per client (hidden setting).
 `game.modules.get("stef-ds-charsheet").api` provides:
 - `EvolvedHeroSheet`, `EvolvedNPCSheet`: the sheet classes (registered as `stef-ds-charsheet.EvolvedHeroSheet` and
   `stef-ds-charsheet.EvolvedNPCSheet`).
-- `migrateLegacy({dryRun, force})`: imports the data of the pre-1.0 module (see *Upgrading* below).
-
-## Upgrading from Draw Steel: Tidy Sheet (`ds-tidy-sheet`)
-
-This module was called "Draw Steel: Tidy Sheet" (`ds-tidy-sheet`) before 1.0. To move a world over:
-
-1. Install this module and enable it; disable the old one.
-2. On the first load the GM's client copies the old module's data and shows a notification:
-   - the world setting *use as default*;
-   - each user's client settings (accent colour, portrait shape, class art, sidebar open), when that user next
-     loads the world;
-   - the default hero and monster sheets in *Configure Default Sheets*, if they were the old sheets;
-   - every actor (including unlinked tokens) whose own sheet choice was one of the old sheets.
-3. Reload (F5). To see what would move, or to run it again, use
-   `game.modules.get("stef-ds-charsheet").api.migrateLegacy({ dryRun: true })` in the console (`force: true` reruns
-   it).
-4. Remove the old module.
 
 ## Known limitations
 
