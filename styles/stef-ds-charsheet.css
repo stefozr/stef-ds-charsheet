@@ -534,6 +534,7 @@
   box-shadow: var(--cse-shadow);
 }
 .ds-cse .cse-portrait {
+  position: relative;
   aspect-ratio: 1 / 0.9;
   overflow: hidden;
   background: #111;
@@ -547,6 +548,95 @@
   object-position: var(--avatar-object-position, top);
   cursor: pointer;
 }
+/*
+ * Framing (flag `portrait`, and edit mode): the image keeps its own aspect ratio and the frame is a window onto it.
+ * zoom = image width / frame width; pan = image centre offset from the frame centre, in % of the frame.
+ */
+.ds-cse .cse-portrait.cse-free img {
+  position: absolute;
+  left: calc(50% + var(--cse-pan-x, 0%));
+  top: calc(50% + var(--cse-pan-y, 0%));
+  width: calc(var(--cse-zoom, 1) * 100%);
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: fill;
+  transform: translate(-50%, -50%);
+}
+/* Frame edge while framing (above the image, under the toolbar). */
+.ds-cse .cse-portrait.cse-framing.cse-free::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px var(--cse-gold-75);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.ds-cse .cse-portrait.cse-framing.cse-free:hover::after,
+.ds-cse .cse-portrait.cse-dragging::after { opacity: 1; }
+/* The whole image outside the frame while framing; lives on <body>, positioned and clipped by the sheet. */
+img.cse-portrait-ghost {
+  position: fixed;
+  margin: 0;
+  padding: 0;
+  border: none;
+  max-width: none;
+  max-height: none;
+  object-fit: fill;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.ds-cse .cse-portrait.cse-framing img {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.ds-cse .cse-portrait.cse-dragging img { cursor: grabbing; }
+
+/* Edit-mode framing toolbar: a dark pill at the bottom of the portrait, shown on hover. */
+.ds-cse .cse-portrait-tools {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 999px;
+  background: #1f2026d9;
+  box-shadow: 0 1px 4px #0008;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.ds-cse .cse-portrait:hover .cse-portrait-tools,
+.ds-cse .cse-portrait:focus-within .cse-portrait-tools { opacity: 1; }
+.ds-cse .cse-portrait.cse-dragging .cse-portrait-tools { opacity: 0; }
+.ds-cse .cse-portrait-tools button,
+.ds-cse .cse-portrait-tools .cse-portrait-hint {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--cse-gold-75);
+  font-size: 0.8rem;
+  line-height: 1;
+  box-shadow: none;
+}
+.ds-cse .cse-portrait-tools button:hover:not(:disabled) { color: var(--cse-gold-94); background: #ffffff1a; }
+.ds-cse .cse-portrait-tools button:disabled { opacity: 0.35; cursor: default; }
+.ds-cse .cse-portrait-tools .cse-portrait-hint { cursor: help; color: var(--cse-gold-62); }
 .ds-cse.cse-portrait-round .cse-portrait {
   aspect-ratio: 1;
   margin: 0.6rem 1.25rem 0.25rem;

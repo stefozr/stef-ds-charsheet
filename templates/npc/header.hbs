@@ -3,8 +3,17 @@
   {{#if avatarProperties.objectPosition}} --avatar-object-position: {{avatarProperties.objectPosition}}; {{/if}}
   ">
   <div class="cse-vitals-container">
-    <div class="cse-portrait">
-      <img src="{{document.img}}" alt="{{document.name}}" data-action="{{ifThen isPlay "showPortraitArtwork" "editImage"}}" {{#unless isPlay}}data-edit="img"{{/unless}} title="{{document.name}}">
+    {{!-- Edit mode: drag the image to pan, wheel or the toolbar to zoom; a plain click still picks a new image. --}}
+    <div class="cse-portrait {{#unless isPlay}}{{#if editable}}cse-framing{{/if}}{{/unless}} {{#if csePortrait.active}}cse-free{{/if}}" data-cse-fit="{{cseFit.fit}}" data-cse-anchor="{{cseFit.anchor}}" style="--cse-pan-x: {{csePortrait.x}}%; --cse-pan-y: {{csePortrait.y}}%; --cse-zoom: {{csePortrait.zoom}};">
+      <img src="{{document.img}}" alt="{{document.name}}" data-action="{{ifThen isPlay "showPortraitArtwork" "editImage"}}" {{#unless isPlay}}data-edit="img" draggable="false"{{/unless}} title="{{document.name}}">
+      {{#unless isPlay}}{{#if editable}}
+      <div class="cse-portrait-tools">
+        <button type="button" data-action="cseZoomPortrait" data-step="-1" data-tooltip="DSCSE.Portrait.ZoomOut" aria-label="{{localize "DSCSE.Portrait.ZoomOut"}}"><i class="fa-solid fa-magnifying-glass-minus" inert></i></button>
+        <button type="button" data-action="cseZoomPortrait" data-step="1" data-tooltip="DSCSE.Portrait.ZoomIn" aria-label="{{localize "DSCSE.Portrait.ZoomIn"}}"><i class="fa-solid fa-magnifying-glass-plus" inert></i></button>
+        <button type="button" data-action="cseResetPortrait" {{disabled (not csePortrait.active)}} data-tooltip="DSCSE.Portrait.Reset" aria-label="{{localize "DSCSE.Portrait.Reset"}}"><i class="fa-solid fa-arrows-rotate" inert></i></button>
+        <span class="cse-portrait-hint" data-tooltip="DSCSE.Portrait.Hint"><i class="fa-solid fa-circle-info" inert></i></span>
+      </div>
+      {{/if}}{{/unless}}
     </div>
     <div class="cse-vitals">
       {{> cseStaminaMeter}}

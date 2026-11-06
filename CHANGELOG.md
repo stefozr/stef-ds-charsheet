@@ -3,6 +3,15 @@
 All notable changes to this module are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.0] - 2026-11-01
+
+### Added
+- Portrait framing: with the sheet unlocked, hover the portrait to see the whole image (the parts outside the frame
+  dimmed over the header), then drag it to choose what the frame shows and scroll to zoom in or out around the
+  cursor, down to the whole picture inside the frame. A small toolbar on the portrait has zoom out, zoom in and reset.
+  A plain click still chooses another image. The framing is stored on the actor, so everyone sees it, and a new image
+  starts with the automatic fit again. Works on hero and monster sheets and with every portrait shape.
+
 ## [1.0.0] - 2026-10-31
 
 First public release. The sheets are the Evolved Hero Sheet and

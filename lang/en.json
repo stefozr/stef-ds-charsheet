@@ -25,6 +25,12 @@
         "Hint": "Show the hero's class artwork behind the hero sheet header (the header then uses dark colours). Heroes without a class, or with a class that has no artwork, keep the plain header. Per client."
       }
     },
+    "Portrait": {
+      "ZoomIn": "Zoom in",
+      "ZoomOut": "Zoom out",
+      "Reset": "Reset to the automatic fit",
+      "Hint": "The whole image shows while you hover. Drag it to choose what the frame shows, scroll to zoom, click to choose another image. Everyone sees this framing."
+    },
     "Search": "Search",
     "ExpandAll": "Expand all sections",
     "CollapseAll": "Collapse all sections",

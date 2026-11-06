@@ -23,6 +23,10 @@ the system sheet. Retainers, objects and parties keep the system sheets.
   resource with an icon per class, Surges (click to gain surges with a hero token), and the Epic resource from level
   10. Minions in a single squad show the squad's Stamina, like the system sheet. The portrait can be square, round
   or unframed.
+- **Portrait framing.** Unlock the sheet and hover the portrait: the whole image appears, dimmed outside the frame.
+  Drag it to choose what the frame shows and scroll to zoom (around the cursor). The toolbar on the portrait zooms in
+  and out and resets to the automatic fit; a plain click still chooses another image. The framing is saved on the
+  actor (everyone sees it) and is dropped when the image changes.
 - **Chip sidebar** (toggle left of the tabs, remembered per client): Immunities (green), Weaknesses (red), Skills
   grouped by skill group and Languages as chips; monsters also get the *With Captain* toggle.
 - **Collapsible rows.** Tabs: Abilities (first), Features, Equipment, Projects, Effects, Biography. Click anywhere on

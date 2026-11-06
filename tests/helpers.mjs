@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
-import { classArtFile, damageTraitEdit, groupSkills, matchesSearch, percent, staminaMeter, traitChips } from "../scripts/helpers.mjs";
+import {
+  clampFrame, classArtFile, damageTraitEdit, fitFrame, groupSkills, matchesSearch, percent, portraitFit, portraitFrame,
+  staminaMeter, traitChips, zoomFrameAt,
+} from "../scripts/helpers.mjs";
 
 assert.equal(matchesSearch("Black Ash Teleport Magic, Ranged", ""), true, "empty query matches");
 assert.equal(matchesSearch("Black Ash Teleport", "ash"), true, "case-insensitive substring");
@@ -57,4 +60,54 @@ assert.equal(classArtFile("homebrew-fury", "Fury"), "Fury.webp", "unknown _dsid 
 assert.equal(classArtFile("unknown", "Homebrew"), null, "unknown class");
 assert.equal(classArtFile(undefined, undefined), null, "no class");
 assert.equal(classArtFile("constructor"), null, "no prototype keys");
+// Portrait framing
+assert.deepEqual(clampFrame({ x: 12.345, y: -999, zoom: 99 }), { x: 12.3, y: -500, zoom: 10 }, "clamped and rounded");
+assert.deepEqual(clampFrame({ x: "a", zoom: 0.01 }), { x: 0, y: 0, zoom: 0.1 }, "bad values fall back, zoom floor");
+assert.equal(clampFrame({ zoom: 1.23456 }).zoom, 1.235, "zoom rounded to 0.001");
+assert.deepEqual(clampFrame(), { x: 0, y: 0, zoom: 1 }, "default");
+assert.deepEqual(portraitFrame({ v: 2, src: "a.webp", x: 10, y: 5, zoom: 2 }, "a.webp"), { x: 10, y: 5, zoom: 2, active: true });
+assert.equal(portraitFrame({ src: "a.webp", x: 10, y: 5, zoom: 2 }, "a.webp").active, false, "first-build flag ignored");
+assert.deepEqual(portraitFrame({ v: 2, src: "old.webp", x: 10, y: 5, zoom: 2 }, "a.webp"), { x: 0, y: 0, zoom: 1, active: false },
+  "framing made for another image is ignored");
+assert.deepEqual(portraitFrame(undefined, "a.webp"), { x: 0, y: 0, zoom: 1, active: false }, "no flag");
+
+{
+  const F = 1 / 0.9; // the portrait frame's aspect
+  // Tall image (aspect 0.5), cover/top: full width, top edge on the frame top.
+  const tall = fitFrame({ imgAspect: 0.5, frameAspect: F, fit: "cover", anchor: "top" });
+  assert.equal(tall.zoom, 1);
+  assert.ok(Math.abs(tall.y - ((F / 0.5) / 2 - 0.5) * 100) < 0.1, "top edge on the frame top");
+  assert.equal(tall.x, 0);
+  // Wide image (aspect 2), cover: the height fills (zoom a/F), no vertical offset.
+  const wide = fitFrame({ imgAspect: 2, frameAspect: F, fit: "cover", anchor: "top" });
+  assert.equal(wide.zoom, Math.round((2 / F) * 1000) / 1000);
+  assert.ok(Math.abs(wide.y) < 0.1, "fills the height exactly");
+  // Tall image, contain/bottom: the height fits, no vertical offset.
+  const contain = fitFrame({ imgAspect: 0.5, frameAspect: F, fit: "contain", anchor: "bottom" });
+  assert.equal(contain.zoom, Math.round((0.5 / F) * 1000) / 1000);
+  assert.ok(Math.abs(contain.y) < 0.1);
+  // Wide image, contain/bottom: full width, bottom edge on the frame bottom.
+  const wideContain = fitFrame({ imgAspect: 2, frameAspect: F, fit: "contain", anchor: "bottom" });
+  assert.equal(wideContain.zoom, 1);
+  assert.ok(Math.abs(wideContain.y - (0.5 - (F / 2) / 2) * 100) < 0.1, "bottom edge on the frame bottom");
+  assert.deepEqual(fitFrame({ imgAspect: 1, frameAspect: 1 }), { x: 0, y: 0, zoom: 1 }, "square in square");
+  assert.deepEqual(fitFrame({ imgAspect: 0, frameAspect: 1 }), { x: 0, y: 0, zoom: 1 }, "unknown size");
+}
+assert.deepEqual(portraitFit("square"), { fit: "cover", anchor: "top" });
+assert.deepEqual(portraitFit("transparent"), { fit: "contain", anchor: "bottom" });
+assert.deepEqual(portraitFit("round", { objectFit: "contain", objectPosition: "center" }), { fit: "contain", anchor: "center" });
+assert.deepEqual(portraitFit("square", { objectPosition: "center bottom" }), { fit: "cover", anchor: "bottom" });
+
+{
+  // The image point under the cursor stays put: screen = t + p * z  =>  p = (c - t) / z must be unchanged.
+  const before = { x: 10, y: -20, zoom: 1.5 };
+  const after = zoomFrameAt(before, 30, 15, 2);
+  assert.equal(after.zoom, 3);
+  assert.ok(Math.abs((30 - before.x) / before.zoom - (30 - after.x) / after.zoom) < 0.1, "x under cursor fixed");
+  assert.ok(Math.abs((15 - before.y) / before.zoom - (15 - after.y) / after.zoom) < 0.1, "y under cursor fixed");
+  assert.deepEqual(zoomFrameAt({ x: 0, y: 0, zoom: 1 }, 0, 0, 0.5), { x: 0, y: 0, zoom: 0.5 }, "zoom about the centre");
+  assert.equal(zoomFrameAt({ x: 0, y: 0, zoom: 10 }, 20, 20, 2).zoom, 10, "zoom ceiling");
+  assert.deepEqual(zoomFrameAt({ x: 5, y: 5, zoom: 10 }, 20, 20, 2), { x: 5, y: 5, zoom: 10 }, "no pan at the ceiling");
+}
+
 console.log("CHARACTER SHEETS EVOLVED HELPER TESTS PASSED");
